@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DA Blueprint</title>
+  <meta name="description" content="DA Blueprint — something new for the way New York builds. In development.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="DA Blueprint">
+  <meta property="og:description" content="Something new for the way New York builds. In development.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://da-blueprint.com">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="DA Blueprint">
+  <meta name="twitter:description" content="Something new for the way New York builds. In development.">
+
+  <!-- Inline SVG favicon (replace with a real one later) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230a192f%22/><text y=%22.92em%22 x=%2250%22 font-size=%2270%22 text-anchor=%22middle%22 fill=%22%23ede7d9%22 font-family=%22Georgia,serif%22 font-style=%22italic%22>d</text></svg>">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0a192f;
+      --paper: #ede7d9;
+      --paper-dim: rgba(237, 231, 217, 0.55);
+      --paper-faint: rgba(237, 231, 217, 0.09);
+      --grid: rgba(237, 231, 217, 0.06);
+      --accent: #c89968;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    body {
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'Fraunces', Georgia, serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Faint blueprint grid */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Faint film grain */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.93 0 0 0 0 0.91 0 0 0 0 0.85 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      opacity: 0.05;
+      pointer-events: none;
+      z-index: 1;
+      mix-blend-mode: overlay;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 32px 40px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+      opacity: 0;
+      animation: fadeIn 1.2s ease 0.4s forwards;
+    }
+
+    .wordmark { letter-spacing: 0.22em; }
+    .wordmark span { color: var(--accent); margin: 0 4px; }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px 0;
+      max-width: 920px;
+    }
+
+    .logo {
+      display: block;
+      width: 180px;
+      height: 180px;
+      margin-bottom: 56px;
+      border: 1px solid var(--paper-faint);
+      opacity: 0;
+      animation: rise 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s forwards;
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeIn 1.2s ease 0.6s forwards;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      display: inline-block;
+      width: 36px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(60px, 13vw, 176px);
+      font-weight: 300;
+      line-height: 0.92;
+      letter-spacing: -0.035em;
+      margin-bottom: 36px;
+      font-variation-settings: "opsz" 144;
+      opacity: 0;
+      animation: rise 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards;
+    }
+
+    h1 em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+      font-variation-settings: "opsz" 144;
+    }
+
+    .tagline {
+      font-size: clamp(18px, 2.2vw, 24px);
+      font-weight: 300;
+      line-height: 1.45;
+      color: var(--paper);
+      max-width: 560px;
+      font-variation-settings: "opsz" 36;
+      opacity: 0;
+      animation: fadeIn 1.2s ease 1.2s forwards;
+    }
+
+    .tagline em {
+      font-style: italic;
+      color: var(--paper-dim);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+      opacity: 0;
+      animation: fadeIn 1.2s ease 1.6s forwards;
+    }
+
+    footer a {
+      color: var(--paper);
+      text-decoration: none;
+      border-bottom: 1px solid var(--paper-faint);
+      padding-bottom: 2px;
+      transition: border-color 0.3s ease, color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .coord { font-variant-numeric: tabular-nums; }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 22px; }
+      main { padding: 56px 0; }
+      header, footer {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+      .eyebrow { margin-bottom: 28px; }
+      h1 { margin-bottom: 28px; }
+      .logo {
+        width: 140px;
+        height: 140px;
+        margin-bottom: 40px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="wordmark">DA<span>·</span>BLUEPRINT</div>
+      <div class="coord">N 40.7128 &nbsp;·&nbsp; W 74.0060</div>
+    </header>
+
+    <main>
+      <img src="logo.png" alt="DA Blueprint" class="logo">
+      <div class="eyebrow">In Development</div>
+      <h1>Website<br><em>incoming.</em></h1>
+      <p class="tagline">Something new for the way New York builds. <em>More soon.</em></p>
+    </main>
+
+    <footer>
+      <a href="mailto:hello@da-blueprint.com">hello@da-blueprint.com</a>
+      <div>New York &nbsp;·&nbsp; 2026</div>
+    </footer>
+  </div>
+</body>
+</html>
