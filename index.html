@@ -3,260 +3,338 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DA Blueprint</title>
-  <meta name="description" content="DA Blueprint — something new for the way New York builds. In development.">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="DA Blueprint">
-  <meta property="og:description" content="Something new for the way New York builds. In development.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://da-blueprint.com">
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="DA Blueprint">
-  <meta name="twitter:description" content="Something new for the way New York builds. In development.">
-
-  <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --ink: #0a192f;
-      --paper: #ede7d9;
-      --paper-dim: rgba(237, 231, 217, 0.55);
-      --paper-faint: rgba(237, 231, 217, 0.09);
-      --grid: rgba(237, 231, 217, 0.06);
-      --accent: #c89968;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-
-    body {
-      background: var(--ink);
-      color: var(--paper);
-      font-family: 'Fraunces', Georgia, serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* Faint blueprint grid */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--grid) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-      background-size: 56px 56px;
-      mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
-      -webkit-mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Faint film grain */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.93 0 0 0 0 0.91 0 0 0 0 0.85 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-      opacity: 0.05;
-      pointer-events: none;
-      z-index: 1;
-      mix-blend-mode: overlay;
-    }
-
-    .container {
-      position: relative;
-      z-index: 2;
-      min-height: 100vh;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      padding: 32px 40px;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--paper-dim);
-      opacity: 0;
-      animation: fadeIn 1.2s ease 0.4s forwards;
-    }
-
-    .wordmark { letter-spacing: 0.22em; }
-    .wordmark span { color: var(--accent); margin: 0 4px; }
-
-    main {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 80px 0;
-      max-width: 920px;
-    }
-
-    .logo {
-      display: block;
-      width: 180px;
-      height: 180px;
-      margin-bottom: 56px;
-      border: 1px solid var(--paper-faint);
-      opacity: 0;
-      animation: rise 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s forwards;
-    }
-
-    .eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 36px;
-      opacity: 0;
-      animation: fadeIn 1.2s ease 0.6s forwards;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .eyebrow::before {
-      content: "";
-      display: inline-block;
-      width: 36px;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    h1 {
-      font-size: clamp(60px, 13vw, 176px);
-      font-weight: 300;
-      line-height: 0.92;
-      letter-spacing: -0.035em;
-      margin-bottom: 36px;
-      font-variation-settings: "opsz" 144;
-      opacity: 0;
-      animation: rise 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards;
-    }
-
-    h1 em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--accent);
-      font-variation-settings: "opsz" 144;
-    }
-
-    .tagline {
-      font-size: clamp(18px, 2.2vw, 24px);
-      font-weight: 300;
-      line-height: 1.45;
-      color: var(--paper);
-      max-width: 560px;
-      font-variation-settings: "opsz" 36;
-      opacity: 0;
-      animation: fadeIn 1.2s ease 1.2s forwards;
-    }
-
-    .tagline em {
-      font-style: italic;
-      color: var(--paper-dim);
-    }
-
-    footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--paper-dim);
-      opacity: 0;
-      animation: fadeIn 1.2s ease 1.6s forwards;
-    }
-
-    footer a {
-      color: var(--paper);
-      text-decoration: none;
-      border-bottom: 1px solid var(--paper-faint);
-      padding-bottom: 2px;
-      transition: border-color 0.3s ease, color 0.3s ease;
-    }
-
-    footer a:hover {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    .coord { font-variant-numeric: tabular-nums; }
-
-    @keyframes fadeIn { to { opacity: 1; } }
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(28px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 640px) {
-      .container { padding: 24px 22px; }
-      main { padding: 56px 0; }
-      header, footer {
-        flex-direction: column;
-        gap: 8px;
-        align-items: flex-start;
-      }
-      .eyebrow { margin-bottom: 28px; }
-      h1 { margin-bottom: 28px; }
-      .logo {
-        width: 140px;
-        height: 140px;
-        margin-bottom: 40px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+  <title>D.A. BluePrint Technologies | NYC Filing Workflow Intelligence</title>
+  <meta name="description" content="D.A. BluePrint Technologies helps architects, engineers, expediters, and construction teams improve filing accuracy and streamline NYC job submission workflows.">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="wordmark">DA<span>·</span>BLUEPRINT</div>
-      <div class="coord">N 40.7128 &nbsp;·&nbsp; W 74.0060</div>
-    </header>
+<div class="tech-grid"></div>
+<div class="tech-glow"></div>
 
-    <main>
-      <img src="logo.png" alt="DA Blueprint" class="logo">
-      <div class="eyebrow">In Development</div>
-      <h1>Website<br><em>incoming.</em></h1>
-      <p class="tagline">Something new for the way New York builds. <em>More soon.</em></p>
-    </main>
+<header class="site-header" id="siteHeader">
+  <a href="index.html" class="brand">
+    <img src="assets/logo.png" alt="D.A. BluePrint Technologies">
+    <div>
+      <span>D.A. BluePrint Technologies</span>
+      <small>40.7128° N &bull; 74.0060° W</small>
+    </div>
+  </a>
+  <nav class="nav" aria-label="Main navigation">
+    <a href="company.html">Company</a>
+    <a href="solutions.html">Solutions</a>
+    <a href="product.html">Product</a>
+    <a href="process.html">Process</a>
+    <a href="industries.html">Industries</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+  <a href="#" class="nav-cta-outline">Client Login</a>
+  <button class="menu-btn" aria-label="Open menu">Menu</button>
+</header>
 
-    <footer>
-      <a href="mailto:hello@da-blueprint.com">hello@da-blueprint.com</a>
-      <div>New York &nbsp;·&nbsp; 2026</div>
-    </footer>
+<main>
+  <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline poster="assets/images/citycranes.jpg">
+      <source src="assets/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-scrim"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="hero-inner">
+      <p class="eyebrow">NYC Filing Workflow Intelligence</p>
+      <h1>Reduce filing delays with real-time submission guidance.</h1>
+      <p class="hero-copy">
+        D.A. BluePrint Technologies helps architects, engineers, expediters, and construction teams improve filing accuracy, reduce preparation inefficiencies, and streamline NYC job submission workflows.
+      </p>
+      <div class="hero-actions">
+        <a href="contact.html" class="nav-cta">Schedule Consultation</a>
+        <a href="solutions.html" class="btn">Explore Solutions</a>
+      </div>
+    </div>
+
+    <div class="hero-cta-tile">
+      <h3>Schedule a Demo</h3>
+      <p>See D.A. BluePrint in action. Book a 30-minute session to explore how we can improve your team's filing operations.</p>
+      <a href="contact.html" class="hero-cta-btn">Book Demo</a>
+    </div>
+  </section>
+
+  <section class="outcome-strip" aria-label="Platform outcomes">
+    <div class="outcome-strip__item">
+      <svg class="outcome-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M2 5l4 5 3-2 5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 12h4v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <strong>Reduce</strong>
+      <span>Filing Preparation Inefficiencies</span>
+    </div>
+    <div class="outcome-strip__item">
+      <svg class="outcome-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <strong>Improve</strong>
+      <span>Submission Accuracy</span>
+    </div>
+    <div class="outcome-strip__item">
+      <svg class="outcome-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M9 2L4 9h5l-2 5 7-8H9l1-4z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <strong>Streamline</strong>
+      <span>NYC Job Filing Workflows</span>
+    </div>
+  </section>
+
+  <section class="role-section">
+    <div class="section-inner">
+      <p class="section-eyebrow">Built for Filing Operations</p>
+      <h2>Solutions for every role in the filing process.</h2>
+
+      <div class="role-tile-grid">
+        <article class="role-tile">
+          <img src="assets/images/creating.jpg" alt="Architect reviewing filing drawings">
+          <div class="role-tile__content">
+            <div class="role-tile__icon">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="2" y="14" width="14" height="2" rx="1" fill="currentColor"/><path d="M4 14L9 3l5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M6.5 10h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <h3>Architects &amp; Engineers</h3>
+              <p class="role-tile__sub">Design professionals &amp; PEs</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="role-tile">
+          <img src="assets/images/focus.jpg" alt="Expediter managing digital filing workflow">
+          <div class="role-tile__content">
+            <div class="role-tile__icon">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="3" y="2" width="12" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 6h6M6 9h6M6 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <h3>Expediters</h3>
+              <p class="role-tile__sub">Filing &amp; submission specialists</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="role-tile">
+          <img src="assets/images/sharing.jpg" alt="Construction team reviewing job filing requirements">
+          <div class="role-tile__content">
+            <div class="role-tile__icon">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 2l1.5 3h3.5l-2.8 2.1 1 3.4L9 8.8l-3.2 1.7 1-3.4L4 5h3.5L9 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M3 16h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 16v-4h6v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <h3>Construction Teams</h3>
+              <p class="role-tile__sub">Site &amp; project field teams</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="role-tile">
+          <img src="assets/images/property.jpg" alt="Real estate development building exterior">
+          <div class="role-tile__content">
+            <div class="role-tile__icon">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="2" y="8" width="14" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 8V6a4 4 0 018 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/></svg>
+            </div>
+            <div>
+              <h3>Developers &amp; Property Managers</h3>
+              <p class="role-tile__sub">Owners, operators &amp; asset teams</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section two-column">
+    <div>
+      <p class="eyebrow">Filing Workflow Intelligence</p>
+      <h2>Submission guidance built for NYC operations.</h2>
+    </div>
+    <p>D.A. BluePrint Technologies provides workflow intelligence tools that help architecture, engineering, construction, and filing professionals reduce filing preparation time, improve submission accuracy, and streamline NYC job filing operations from pre-planning through submission readiness.</p>
+  </section>
+
+  <section class="section product-grid">
+    <article class="product-card">
+      <img src="assets/images/meeting.jpg" alt="Filing preparation workflow">
+      <div>
+        <p class="card-kicker">Filing Intelligence</p>
+        <h3>Pre-Planning Review</h3>
+        <p>Identify potential filing issues before submission preparation begins. Reduce surprises and improve team readiness across alteration and new job filings.</p>
+        <a href="product.html" class="btn-link">Explore →</a>
+      </div>
+    </article>
+    <article class="product-card">
+      <img src="assets/images/working.jpg" alt="Document validation and review">
+      <div>
+        <p class="card-kicker">Document Guidance</p>
+        <h3>Filing Validation</h3>
+        <p>Review job information against workflow logic and NYC filing requirements. Surface gaps in documentation before submission to reduce rejections and rework.</p>
+        <a href="product.html" class="btn-link">Explore →</a>
+      </div>
+    </article>
+    <article class="product-card">
+      <img src="assets/images/building.jpg" alt="Submission readiness dashboard">
+      <div>
+        <p class="card-kicker">Operational Visibility</p>
+        <h3>Submission Readiness</h3>
+        <p>Track filing status, documentation completeness, and submission readiness across active projects and job types through a single operational layer.</p>
+        <a href="product.html" class="btn-link">Explore →</a>
+      </div>
+    </article>
+  </section>
+
+  <section class="section">
+    <p class="section-eyebrow">Platform Intelligence</p>
+    <h2>Connected filing workflow guidance in one intelligent layer.</h2>
+    <p style="max-width:680px;margin-bottom:0">D.A. BluePrint Technologies connects project intake, document review, filing validation, and submission guidance so teams can prepare and file with greater accuracy and efficiency.</p>
+    <div class="step-tile-grid">
+      <div class="step-tile">
+        <img src="assets/images/handshake.jpg" alt="Project intake meeting">
+        <div class="step-content">
+          <span>01</span>
+          <h3>Project Intake</h3>
+          <p>Capture project details, filing type, documentation, and initial requirements from the team to establish a structured workflow baseline.</p>
+        </div>
+      </div>
+      <div class="step-tile">
+        <img src="assets/images/corridor.jpg" alt="Pre-planning review">
+        <div class="step-content">
+          <span>02</span>
+          <h3>Pre-Planning Review</h3>
+          <p>Identify potential filing issues before submission preparation begins. Reduce surprises and improve team readiness across all filing types.</p>
+        </div>
+      </div>
+      <div class="step-tile">
+        <img src="assets/images/nycstreet.jpg" alt="Filing validation workflow">
+        <div class="step-content">
+          <span>03</span>
+          <h3>Filing Validation</h3>
+          <p>Review job information against workflow logic and NYC filing requirements to surface documentation gaps before submission.</p>
+        </div>
+      </div>
+      <div class="step-tile">
+        <img src="assets/images/construction.jpg" alt="Submission guidance">
+        <div class="step-content">
+          <span>04</span>
+          <h3>Submission Guidance</h3>
+          <p>Receive structured next steps to reduce errors, rework, and submission delays across alteration, new building, and permit filings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="capability-grid">
+      <article class="role-tile">
+        <img src="assets/images/perspective.jpg" alt="Filing preparation workflow">
+        <div class="role-tile__content">
+          <div class="role-tile__icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="3" y="2" width="12" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 6h6M6 9h6M6 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <h3>Filing Preparation</h3>
+            <p class="role-tile__desc">Organize project documentation, job information, and filing requirements so teams can prepare submissions with accuracy and confidence.</p>
+          </div>
+        </div>
+      </article>
+      <article class="role-tile">
+        <img src="assets/images/harlem.jpg" alt="Workflow coordination">
+        <div class="role-tile__content">
+          <div class="role-tile__icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 15c0-2.2 1.8-4 4-4h6c2.2 0 4 1.8 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <h3>Workflow Coordination</h3>
+            <p class="role-tile__desc">Reduce manual coordination across intake, review, document compilation, and submission workflows for architects, engineers, and expediters.</p>
+          </div>
+        </div>
+      </article>
+      <article class="role-tile">
+        <img src="assets/images/nycbirdseye.jpg" alt="Operational visibility dashboard">
+        <div class="role-tile__content">
+          <div class="role-tile__icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="2" y="10" width="4" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="7" y="6" width="4" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="12" y="2" width="4" height="14" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+          </div>
+          <div>
+            <h3>Operational Visibility</h3>
+            <p class="role-tile__desc">Create visibility into filing status, documentation gaps, team workload, and project submission readiness across active NYC job filings.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section outcomes">
+    <p class="eyebrow">Client Outcomes</p>
+    <h2>Built to support measurable filing improvements.</h2>
+    <div class="outcome-list">
+      <div class="glass-card"><h3>Faster Filing Preparation</h3><p>Teams access clearer filing requirements, document checklists, and submission guidance without relying on fragmented reference materials.</p></div>
+      <div class="glass-card"><h3>Improved Submission Accuracy</h3><p>Filing validation helps surface documentation gaps and workflow issues before submission, reducing rejections and correction cycles.</p></div>
+      <div class="glass-card"><h3>Reduced Manual Coordination</h3><p>Workflow intelligence helps reduce repetitive coordination, manual tracking, and internal back-and-forth across filing teams.</p></div>
+      <div class="glass-card"><h3>Stronger Operational Control</h3><p>Leadership and project coordinators gain better visibility into filing status, documentation readiness, and submission timelines.</p></div>
+    </div>
+  </section>
+
+  <section class="section story-section">
+    <div>
+      <p class="eyebrow">Company</p>
+      <h2>Workflow intelligence for the next era of NYC filing operations.</h2>
+      <p>D.A. BluePrint Technologies is focused on building the intelligence layer that architecture, engineering, construction, and filing professionals need to operate with better data, efficient workflows, and stronger submission guidance across NYC job filings.</p>
+      <a href="company.html" class="btn">About D.A. BluePrint</a>
+    </div>
+    <img src="assets/images/bridge.jpg" alt="D.A. BluePrint Technologies operations platform">
+  </section>
+
+  <section class="cta-band">
+    <div>
+      <p class="eyebrow">Become a Client</p>
+      <h2>Become a client of D.A. BluePrint Technologies.</h2>
+      <p class="cta-band__desc">Partner with D.A. BluePrint Technologies and bring structured workflow intelligence to your NYC filing operations. Join architecture firms, engineers, and construction teams that trust us to streamline their submission processes.</p>
+    </div>
+    <a href="contact.html" class="btn">Get Started</a>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="assets/logo.png" alt="D.A. BluePrint Technologies">
+    <p>Workflow intelligence systems for NYC filing preparation, submission guidance, and operational visibility.</p>
+    <p>D.A. BluePrint Technologies provides software to all 5 boroughs within the city of New York including Manhattan, Brooklyn, Queens, Staten Island, and The Bronx.</p>
+    <a href="mailto:hello@da-blueprint.com">hello@da-blueprint.com</a>
   </div>
+
+  <div class="footer-col">
+    <h4>Platform</h4>
+    <a href="solutions.html">Solutions</a>
+    <a href="product.html">Product</a>
+    <a href="process.html">Process</a>
+    <a href="operations.html">Operations</a>
+  </div>
+
+  <div class="footer-col">
+    <h4>Company</h4>
+    <a href="company.html">About</a>
+    <a href="industries.html">Industries</a>
+    <a href="contact.html">Contact Us</a>
+  </div>
+
+  <div class="footer-col">
+    <h4>Legal</h4>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="legal.html">Legal</a>
+  </div>
+</footer>
+
+<div class="footer-bottom">
+  <span>New York City</span>
+  <a href="mailto:hello@da-blueprint.com">hello@da-blueprint.com</a>
+  <div class="footer-bottom__links">
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+  </div>
+</div>
+<button class="back-top" id="backTop" aria-label="Back to top">&#8593;</button>
+<script src="js/main.js"></script>
 </body>
 </html>
